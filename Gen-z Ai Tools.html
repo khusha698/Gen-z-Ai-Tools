@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GenZ Tools – Smart & Fast Online Tools</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif}
+    body{background:#0b0b12;color:#fff}
+    header{padding:18px 40px;display:flex;justify-content:space-between;align-items:center;background:#11111b;position:sticky;top:0;z-index:10}
+    header h1{color:#6c7bff;font-weight:700}
+    nav a{margin-left:20px;color:#aaa;text-decoration:none}
+    nav a:hover{color:#fff}
+
+    .hero{text-align:center;padding:80px 20px}
+    .hero h2{font-size:42px;margin-bottom:12px}
+    .hero p{color:#aaa;max-width:600px;margin:auto}
+
+    .tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:25px;padding:60px}
+    .card{background:#151524;border-radius:18px;padding:25px}
+    .card h3{color:#6c7bff;margin-bottom:10px}
+    .card p{font-size:14px;color:#bbb;margin-bottom:12px}
+    .card input,.card textarea,.card button{width:100%;margin-top:8px;padding:10px;border-radius:10px;border:none;outline:none}
+    .card input,.card textarea{background:#0f0f19;color:#fff}
+    .card button{background:#6c7bff;color:#fff;font-weight:600;cursor:pointer}
+    .card button:hover{opacity:0.9}
+
+    footer{background:#11111b;padding:30px;text-align:center;color:#888}
+    section{padding:60px 20px}
+    .page{max-width:900px;margin:auto}
+    .page h2{color:#6c7bff;margin-bottom:10px}
+    .page p{color:#ccc;line-height:1.7}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>GenZ Tools</h1>
+  <nav>
+    <a href="#tools">Tools</a>
+    <a href="#about">About</a>
+    <a href="#terms">Terms</a>
+    <a href="#support">Support</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h2>Useful Tools That Work Instantly</h2>
+  <p>All tools here run directly in your browser. No uploads to servers. Fast, private & free.</p>
+</section>
+
+<section id="tools" class="tools">
+
+  <div class="card">
+    <h3>Image Compressor</h3>
+    <p>Compress images locally in your browser.</p>
+    <input type="file" accept="image/*" id="imgInput">
+    <button onclick="compressImage()">Compress</button>
+    <a id="downloadImg"></a>
+  </div>
+
+  <div class="card">
+    <h3>Text → PDF</h3>
+    <p>Convert text into a downloadable PDF.</p>
+    <textarea id="pdfText" placeholder="Enter text..."></textarea>
+    <button onclick="createPDF()">Create PDF</button>
+  </div>
+
+  <div class="card">
+    <h3>Resume Builder (Basic)</h3>
+    <p>Generate a simple resume instantly.</p>
+    <textarea id="resumeText" placeholder="Name, skills, experience..."></textarea>
+    <button onclick="downloadResume()">Download Resume</button>
+  </div>
+
+  <div class="card">
+    <h3>Word Counter</h3>
+    <p>Count words & characters.</p>
+    <textarea id="countText" oninput="countWords()"></textarea>
+    <p id="countResult"></p>
+  </div>
+
+  <div class="card">
+    <h3>Password Generator</h3>
+    <p>Create strong random passwords.</p>
+    <button onclick="generatePassword()">Generate</button>
+    <input id="passwordOutput" readonly>
+  </div>
+
+  <div class="card">
+    <h3>AI Prompt Helper</h3>
+    <p>Ready-made prompts for AI tools.</p>
+    <textarea readonly>Act as an expert and explain this topic in simple words with examples.</textarea>
+  </div>
+
+</section>
+
+<section id="about">
+  <div class="page">
+    <h2>About Us</h2>
+    <p>GenZ Tools provides fast, privacy-friendly browser tools. Everything works locally without storing your files.</p>
+  </div>
+</section>
+
+<section id="terms">
+  <div class="page">
+    <h2>Terms & Conditions</h2>
+    <p>All tools are provided as-is. We do not store files or data. Use tools responsibly.</p>
+  </div>
+</section>
+
+<section id="support">
+  <div class="page">
+    <h2>Support</h2>
+    <p>Need help? Contact us at <strong>pcop157@gmail.com</strong></p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2025 GenZ Tools ⚡</p>
+</footer>
+
+<script>
+function compressImage(){
+  const input=document.getElementById('imgInput');
+  if(!input.files[0])return;
+  const img=new Image();
+  const reader=new FileReader();
+  reader.onload=e=>{img.src=e.target.result};
+  img.onload=()=>{
+    const canvas=document.createElement('canvas');
+    canvas.width=img.width*0.6;
+    canvas.height=img.height*0.6;
+    const ctx=canvas.getContext('2d');
+    ctx.drawImage(img,0,0,canvas.width,canvas.height);
+    const link=document.getElementById('downloadImg');
+    link.href=canvas.toDataURL('image/jpeg',0.7);
+    link.download='compressed.jpg';
+    link.innerText='Download Image';
+  }
+  reader.readAsDataURL(input.files[0]);
+}
+
+function createPDF(){
+  const text=document.getElementById('pdfText').value;
+  const blob=new Blob([text],{type:'application/pdf'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='file.pdf';
+  a.click();
+}
+
+function downloadResume(){
+  const text=document.getElementById('resumeText').value;
+  const blob=new Blob([text],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='resume.txt';
+  a.click();
+}
+
+function countWords(){
+  const t=document.getElementById('countText').value;
+  const words=t.trim().split(/\s+/).filter(Boolean).length;
+  document.getElementById('countResult').innerText=`Words: ${words} | Characters: ${t.length}`;
+}
+
+function generatePassword(){
+  const chars='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%';
+  let pass='';
+  for(let i=0;i<12;i++)pass+=chars[Math.floor(Math.random()*chars.length)];
+  document.getElementById('passwordOutput').value=pass;
+}
+</script>
+
+</body>
+</html>
